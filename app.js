@@ -23,8 +23,6 @@ getRateBtn.addEventListener('click', function(e) {
   }
 });
 
-// ============================================================================
-
 // Function for getting the exchange rate
 async function getExchangeRate(fromCurrency, toCurrency) {
   const response = await fetch('http://data.fixer.io/api/latest?access_key=0811bd3397f10617d97b1429984d704b');
@@ -41,8 +39,6 @@ async function getExchangeRate(fromCurrency, toCurrency) {
   return exchangeRate;
 }
 
-// getExchangeRate("AFN", "USD").then(result => console.log(result));
-
 // ============================================================================
 
 // Function for converting currency
@@ -53,3 +49,19 @@ async function convertCurrency(fromCurrency, toCurrency, exchangeAmount) {
   return `${exchangeAmount} ${fromCurrency} ====> ${convertedAmount} ${toCurrency}`;
 }
 
+// ============================================================================
+
+// Error Functions
+function inputError() {
+  document.querySelector('.input-error').classList.add('show');
+  setTimeout(() => {
+    document.querySelector('.input-error').classList.add('remove');
+  }, 2500);
+}
+
+function invalidCode() {
+  document.querySelector('.invalid-code').classList.add('show');
+  setTimeout(() => {
+    document.querySelector('.invalid-code').classList.add('remove');
+  }, 1500);
+}
