@@ -1,3 +1,30 @@
+const fromCurrencyInput = document.querySelector('.from-currency');
+const toCurrencyInput = document.querySelector('.to-currency');
+const exchangeAmountInput = document.querySelector('.amount');
+const getRateBtn = document.querySelector('.get-rate');
+
+getRateBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  const fromCurrencyValue = fromCurrencyInput.value;
+  const toCurrencyValue = toCurrencyInput.value;
+  const ExchangeAmountValue = exchangeAmountInput.value;
+
+  if (fromCurrencyValue === '' || toCurrencyValue === '' || ExchangeAmountValue === '') {
+    inputError();
+  } else {
+      convertCurrency(fromCurrencyValue, toCurrencyValue, ExchangeAmountValue).then(exchangeResult => {
+      document.querySelector('.currency-item').innerText = exchangeResult;
+
+      setTimeout(() => {
+        location.reload()
+      }, 6000);
+    })
+    .catch(() => invalidCode());
+  }
+});
+
+// ============================================================================
+
 // Function for getting the exchange rate
 async function getExchangeRate(fromCurrency, toCurrency) {
   const response = await fetch('http://data.fixer.io/api/latest?access_key=0811bd3397f10617d97b1429984d704b');
@@ -8,7 +35,7 @@ async function getExchangeRate(fromCurrency, toCurrency) {
   const exchangeRate = baseCurrency * currencyRates[toCurrency];
 
   if (isNaN(exchangeRate)) {
-    console.log('Error');
+    throw new Error(invalidCode());
   }
 
   return exchangeRate;
@@ -17,6 +44,7 @@ async function getExchangeRate(fromCurrency, toCurrency) {
 // getExchangeRate("AFN", "USD").then(result => console.log(result));
 
 // ============================================================================
+
 // Function for converting currency
 async function convertCurrency(fromCurrency, toCurrency, exchangeAmount) {
   const amountExchangeRate = await getExchangeRate(fromCurrency, toCurrency);
@@ -25,4 +53,3 @@ async function convertCurrency(fromCurrency, toCurrency, exchangeAmount) {
   return `${exchangeAmount} ${fromCurrency} ====> ${convertedAmount} ${toCurrency}`;
 }
 
-convertCurrency("AFN", "USD", 1000).then(exchangeResult => console.log(exchangeResult));
